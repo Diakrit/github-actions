@@ -24,18 +24,18 @@ jobs:
     steps:
       - name: gzip target folder
         run: |
-          tar -zcvf ${{ inputs.target_dir }}.tar.gz ${{ inputs.target_dir }}
+          tar -C ${{ inputs.target_dir }} -zcvf tmp.tar.gz .
 
-      # - name: Upload to  
-      #   run: |
-      #     curl --location --request POST 'https://portal.diakrit.com/api/v3/releases' \     #   actual endpoint ??
-      #     --header 'Authorization: Bearer eyJ0eXA....' \                                    #   Token ??
-      #     --form 'repo="${{ inputs.repo }}"' \
-      #     --form 'ref_name="${{ inputs.ref_name }}"' \
-      #     --form 'ref_type="${{ inputs.ref_type }}"' \
-      #     --form 'commit="${{ inputs.commit }}"' \
-      #     --form 'file=@"${{ inputs.target_dir }}"'
-      
+      - name: Upload zipped file
+        run: |
+          curl --location --request POST 'https://portal.diakrit.com/api/v3/releases' \
+          --header 'Authorization: Bearer ${{ secrets.PORTAL_RELEASE_TOKEN }}' \
+          --form 'repo="${{ inputs.repo }}"' \
+          --form 'ref_name="${{ inputs.ref_name }}"' \
+          --form 'ref_type="${{ inputs.ref_type }}"' \
+          --form 'commit="${{ inputs.commit }}"' \
+          --form 'file=@"./tmp.tar.gz"'
+
 ########################################################################################
 #                                     TEST SECTION                                     #
 ########################################################################################
