@@ -1,0 +1,49 @@
+name: Reusable workflow
+on:
+  workflow_call:
+    inputs:
+      repo:
+        required: true
+        type: string
+      ref_name:
+        required: true
+        type: string
+      commit:
+        required: true
+        type: string
+      ref_type:
+        required: true
+        type: string
+      target_dir:
+        required: true
+        type: string
+
+jobs:
+  resuable_jobs:
+    runs-on: [self-hosted, Linux]
+    steps:
+      - name: gzip target folder
+        run: |
+          tar -zcvf ${{ inputs.target_dir }}.tar.gz ${{ inputs.target_dir }}
+
+      # - name: Upload to  
+      #   run: |
+      #     curl --location --request POST 'https://portal.diakrit.com/api/v3/releases' \     #   actual endpoint ??
+      #     --header 'Authorization: Bearer eyJ0eXA....' \                                    #   Token ??
+      #     --form 'repo="${{ inputs.repo }}"' \
+      #     --form 'ref_name="${{ inputs.ref_name }}"' \
+      #     --form 'ref_type="${{ inputs.ref_type }}"' \
+      #     --form 'commit="${{ inputs.commit }}"' \
+      #     --form 'file=@"${{ inputs.target_dir }}"'
+      
+########################################################################################
+#                                     TEST SECTION                                     #
+########################################################################################
+      # - name: Test vars' values
+      #   run: |
+      #     echo "Ran from resuables"
+      #     echo "value of repo: ${{ inputs.repo }}"
+      #     echo "value of ref_name: ${{ inputs.ref_name }}"
+      #     echo "value of ref_type: ${{ inputs.ref_type }}"
+      #     echo "value of commit: ${{ inputs.commit }}"
+      #     echo "value of file: ${{ inputs.target_dir }}"
