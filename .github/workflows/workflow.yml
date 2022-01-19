@@ -28,7 +28,7 @@ jobs:
 
       - name: Upload zipped file
         run: |
-          curl --location --request POST 'https://portal.diakrit.com/api/v3/releases' \
+          curl --location --request POST 'https://portal.diakrit.com/v3/api/releases' \
           --header 'Authorization: Bearer ${{ secrets.PORTAL_RELEASE_TOKEN }}' \
           --form 'repo="${{ inputs.repo }}"' \
           --form 'ref_name="${{ inputs.ref_name }}"' \
