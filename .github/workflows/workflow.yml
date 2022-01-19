@@ -22,7 +22,6 @@ jobs:
   resuable_jobs:
     runs-on: [self-hosted, Linux]
     steps:
-      - uses: actions/checkout@v2
       - name: gzip target folder
         run: |
           tar -C ${{ inputs.target_dir }} -zcvf tmp.tar.gz .
