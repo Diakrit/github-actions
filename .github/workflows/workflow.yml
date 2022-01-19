@@ -24,7 +24,7 @@ jobs:
     steps:
       - name: gzip target folder
         run: |
-          tar -C ${{ inputs.target_dir }} -zcvf tmp.tar.gz .
+          tar -C ${{ inputs.target_dir }} -zcvf tmp.tar.zip .
 
       - name: Upload zipped file
         run: |
@@ -34,7 +34,7 @@ jobs:
           --form 'ref_name="${{ inputs.ref_name }}"' \
           --form 'ref_type="${{ inputs.ref_type }}"' \
           --form 'commit="${{ inputs.commit }}"' \
-          --form 'file=@"./tmp.tar.gz"'
+          --form 'file=@"./tmp.tar.zip"'
 
 ########################################################################################
 #                                     TEST SECTION                                     #
