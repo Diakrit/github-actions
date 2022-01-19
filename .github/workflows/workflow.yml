@@ -33,7 +33,7 @@ jobs:
           --form 'ref_name="${{ inputs.ref_name }}"' \
           --form 'ref_type="${{ inputs.ref_type }}"' \
           --form 'commit="${{ inputs.commit }}"' \
-          --form 'file=@"${GITHUB_WORKSPACE}/tmp.zip"'
+          --form 'file=@"tmp.zip"'
 
 ########################################################################################
 #                                     TEST SECTION                                     #
