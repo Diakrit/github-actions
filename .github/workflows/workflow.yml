@@ -23,8 +23,7 @@ jobs:
     runs-on: [self-hosted, Linux]
     steps:
       - name: gzip target folder
-        run: |
-          tar -C ${{ inputs.target_dir }} -zcvf tmp.tar.zip .
+        run: (cd ${{ inputs.target_dir }} && zip -r ~/tmp.zip .)
 
       - name: Upload zipped file
         run: |
