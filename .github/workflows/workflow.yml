@@ -17,6 +17,9 @@ on:
       target_dir:
         required: true
         type: string
+      token:
+        required: true
+        type: string
 
 jobs:
   resuable_jobs:
@@ -28,7 +31,7 @@ jobs:
       - name: Upload zipped file
         run: |
           curl --location --request POST 'https://portal.diakrit.com/v3/api/releases' \
-          --header "Authorization: Bearer ${{ secrets.PORTAL_RELEASE_TOKEN }}" \
+          --header "Authorization: Bearer ${{ inputs.token }}" \
           --form 'repo="${{ inputs.repo }}"' \
           --form 'ref_name="${{ inputs.ref_name }}"' \
           --form 'ref_type="${{ inputs.ref_type }}"' \
