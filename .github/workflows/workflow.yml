@@ -2,6 +2,10 @@ name: Reusable workflow
 on:
   workflow_call:
     inputs:
+      location:
+        default: 'https://portal.diakrit.com/v3/api/releases'
+        required: false
+        type: string
       repo:
         required: true
         type: string
@@ -30,7 +34,7 @@ jobs:
 
       - name: Upload zipped file
         run: |
-          curl --location --request POST 'https://portal.diakrit.com/v3/api/releases' \
+          curl --location --request POST '${{ inputs.location }}' \
           --header "Authorization: Bearer ${{ secrets.token }}" \
           --form 'repo="${{ inputs.repo }}"' \
           --form 'ref_name="${{ inputs.ref_name }}"' \
