@@ -44,7 +44,7 @@ jobs:
       - name: Zip downloaded artifact
         if: contains(runner.os, 'windows')
         shell: cmd
-        run: tar.exe -a -c -f tmp.zip tmp.zxp
+        run: tar.exe -a -c -f tmp.zip *.zxp
 
       - name: Zip target folder
         if: contains(runner.os, 'linux')
