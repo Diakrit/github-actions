@@ -52,13 +52,7 @@ jobs:
 
       - name: Upload zipped file
         run: |
-          curl -v --location --request POST '${{ inputs.endpoint }}' \
-          --header 'Authorization: Bearer ${{ secrets.token }}' \
-          --form 'repo="${{ inputs.repo }}"' \
-          --form 'ref_name="${{ inputs.ref_name }}"' \
-          --form 'ref_type="${{ inputs.ref_type }}"' \
-          --form 'commit="${{ inputs.commit }}"' \
-          --form 'file=@"tmp.zip"'
+          curl -v --location --request POST '${{ inputs.endpoint }}' --header 'Authorization: Bearer ${{ secrets.token }}' --form 'repo="${{ inputs.repo }}"' --form 'ref_name="${{ inputs.ref_name }}"' --form 'ref_type="${{ inputs.ref_type }}"' --form 'commit="${{ inputs.commit }}"' --form 'file=@"tmp.zip"'
 
       - name: Remove artifact
         if: contains(runner.os, 'windows')
