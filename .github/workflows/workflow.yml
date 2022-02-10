@@ -2,7 +2,13 @@ name: Reusable workflow
 on:
   workflow_call:
     inputs:
-      location:
+      os:
+        description: Platform to be executed on
+        default: '["self-hosted", "linux-dc"]'
+        required: false
+        type: string
+      endpoint:
+        description: API endpoint (QA or Portal)
         default: 'https://portal.diakrit.com/v3/api/releases'
         required: false
         type: string
@@ -19,7 +25,7 @@ on:
         required: true
         type: string
       target_dir:
-        required: true
+        required: false
         type: string
     secrets:
       token:
@@ -27,17 +33,36 @@ on:
 
 jobs:
   resuable_jobs:
-    runs-on: [self-hosted, Linux]
+    runs-on: ${{fromJSON(inputs.os)}}
     steps:
+      - name: Downlaod artifact
+        if: contains(runner.os, 'windows')
+        uses: actions/download-artifact@v2
+        with:
+          name: tmp
+
+      - name: Zip downloaded artifact
+        if: contains(runner.os, 'windows')
+        shell: cmd
+        run: tar.exe -a -c -f tmp.zip tmp.zxp
+
       - name: Zip target folder
+        if: contains(runner.os, 'linux')
         run: (cd ${{ inputs.target_dir }} && zip -r ${GITHUB_WORKSPACE}/tmp.zip .)
 
       - name: Upload zipped file
         run: |
-          curl --location --request POST '${{ inputs.location }}' \
+          curl --location --request POST '${{ inputs.endpoint }}' \
           --header "Authorization: Bearer ${{ secrets.token }}" \
           --form 'repo="${{ inputs.repo }}"' \
           --form 'ref_name="${{ inputs.ref_name }}"' \
           --form 'ref_type="${{ inputs.ref_type }}"' \
           --form 'commit="${{ inputs.commit }}"' \
           --form 'file=@"tmp.zip"'
+
+      - name: Remove artifact
+        if: contains(runner.os, 'windows')
+        uses: geekyeggo/delete-artifact@v1
+        with:
+          name: tmp
+          failOnError: false
