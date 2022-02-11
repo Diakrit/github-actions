@@ -35,7 +35,7 @@ jobs:
   resuable_jobs:
     runs-on: ${{fromJSON(inputs.os)}}
     steps:
-      - name: Downlaod artifact
+      - name: Download artifact
         if: contains(runner.os, 'windows')
         uses: actions/download-artifact@v2
         with:
@@ -56,7 +56,7 @@ jobs:
         run: |
           curl -v --location --request POST '${{ inputs.endpoint }}' --header 'Authorization: Bearer ${{ secrets.token }}' --form 'repo="${{ inputs.repo }}"' --form 'ref_name="${{ inputs.ref_name }}"' --form 'ref_type="${{ inputs.ref_type }}"' --form 'commit="${{ inputs.commit }}"' --form 'file=@"tmp.zip"'
 
-      - name: Remove artifact
+      - name: Remove uploaded artifact
         if: contains(runner.os, 'windows')
         uses: geekyeggo/delete-artifact@v1
         with:
