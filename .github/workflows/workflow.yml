@@ -44,11 +44,6 @@ jobs:
         with:
           name: tmp
 
-      - name: Zip downloaded artifact
-        if: contains(runner.os, 'windows')
-        shell: cmd
-        run: tar.exe -a -c -f tmp.zip ${{ inputs.target_file }}
-
       - name: Zip target folder
         if: contains(runner.os, 'linux')
         run: (cd ${{ inputs.target_dir }} && zip -r ${GITHUB_WORKSPACE}/tmp.zip .)
