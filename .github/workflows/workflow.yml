@@ -27,7 +27,7 @@ on:
       target_dir:
         required: false
         type: string
-      target_file:
+      zip_filename:
         required: false
         type: string
     secrets:
@@ -42,15 +42,15 @@ jobs:
         if: contains(runner.os, 'windows')
         uses: actions/download-artifact@v2
         with:
-          name: tmp
+          name: built-artifact
 
       - name: Zip target folder
         if: contains(runner.os, 'linux')
-        run: (cd ${{ inputs.target_dir }} && zip -r ${GITHUB_WORKSPACE}/tmp.zip .)
+        run: (cd ${{ inputs.target_dir }} && zip -r ${GITHUB_WORKSPACE}/${{ inputs.zip_filename }}.zip .)
 
       - name: Upload zipped file
         run: |
-          curl -v --location --request POST '${{ inputs.endpoint }}' --header 'Authorization: Bearer ${{ secrets.token }}' --form 'repo="${{ inputs.repo }}"' --form 'ref_name="${{ inputs.ref_name }}"' --form 'ref_type="${{ inputs.ref_type }}"' --form 'commit="${{ inputs.commit }}"' --form 'file=@"tmp.zip"'
+          curl -v --location --request POST '${{ inputs.endpoint }}' --header 'Authorization: Bearer ${{ secrets.token }}' --form 'repo="${{ inputs.repo }}"' --form 'ref_name="${{ inputs.ref_name }}"' --form 'ref_type="${{ inputs.ref_type }}"' --form 'commit="${{ inputs.commit }}"' --form 'file=@"${{ inputs.zip_filename }}.zip"'
 
       - name: Remove uploaded artifact
         if: contains(runner.os, 'windows')
