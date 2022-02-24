@@ -27,6 +27,9 @@ on:
       target_dir:
         required: false
         type: string
+      target_file:
+        required: false
+        type: string
     secrets:
       token:
         required: true
@@ -44,9 +47,7 @@ jobs:
       - name: Zip downloaded artifact
         if: contains(runner.os, 'windows')
         shell: cmd
-        run: |
-          dir
-          tar.exe -a -c -f tmp.zip *.zxp
+        run: tar.exe -a -c -f tmp.zip ${{ inputs.target_file }}
 
       - name: Zip target folder
         if: contains(runner.os, 'linux')
