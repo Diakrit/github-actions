@@ -58,5 +58,5 @@ jobs:
         if: contains(runner.os, 'windows')
         uses: geekyeggo/delete-artifact@v1
         with:
-          name: tmp
+          name: built-artifact
           failOnError: false
