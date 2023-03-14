@@ -35,6 +35,7 @@ jobs:
   resuable_jobs:
     runs-on: ${{fromJSON(inputs.os)}}
     steps:
+      # Download artifact for Windows - @todo we should probably use cache here as well... instead of artifacts
       - name: Download artifact
         if: contains(runner.os, 'windows')
         uses: actions/download-artifact@v2
@@ -46,10 +47,30 @@ jobs:
         shell: cmd
         run: rename *.zip tmp.zip
 
+      # Download and delete cache for Linux
+      - name: Retrieve the build output cache
+        if: contains(runner.os, 'linux')
+        uses: actions/cache/restore@v3
+        with:
+          key: workflow-run-build-output-${{ env.GITHUB_RUN_ID }}-${{ env.GITHUB_RUN_NUMBER }}
+
+      - name: Clean up build output cache
+        if: contains(runner.os, 'linux')
+        uses: actions/github-script@v6
+        with:
+          script: |
+            await github.rest.actions.deleteActionsCacheByKey({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              key: `workflow-run-build-output-${context.runId}-${context.runNumber}`,
+            });
+
+      # Zip the downloaded cache
       - name: Zip target folder
-        if: contains(runner.os, 'linux' ) || contains(runner.os, 'ubuntu-latest' )
+        if: contains(runner.os, 'linux' )
         run: (cd ${{ inputs.target_dir }} && zip -r ${GITHUB_WORKSPACE}/tmp.zip .)
 
+      # Common step to upload the file
       - name: Upload zipped file
         run: |
           curl -v --location --request POST '${{ inputs.endpoint }}' --header 'Authorization: Bearer ${{ secrets.token }}' --form 'repo="${{ inputs.repo }}"' --form 'ref_name="${{ inputs.ref_name }}"' --form 'ref_type="${{ inputs.ref_type }}"' --form 'commit="${{ inputs.commit }}"' --form 'file=@"tmp.zip"'
