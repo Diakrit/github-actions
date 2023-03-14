@@ -4,7 +4,7 @@ on:
     inputs:
       os:
         description: Platform to be executed on
-        default: 'ubuntu-latest'
+        default: '["ubuntu-latest"]'
         required: false
         type: string
       endpoint:
