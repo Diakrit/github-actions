@@ -47,7 +47,7 @@ jobs:
         run: rename *.zip tmp.zip
 
       - name: Zip target folder
-        if: contains(runner.os, 'linux')
+        if: contains(runner.os, 'linux' ) || contains(runner.os, 'ubuntu-latest' )
         run: (cd ${{ inputs.target_dir }} && zip -r ${GITHUB_WORKSPACE}/tmp.zip .)
 
       - name: Upload zipped file
