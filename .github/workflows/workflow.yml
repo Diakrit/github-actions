@@ -52,6 +52,7 @@ jobs:
         if: contains(runner.os, 'linux')
         uses: actions/cache/restore@v3
         with:
+          path: ${{ inputs.target_dir }}
           key: workflow-run-build-output-${{ env.GITHUB_RUN_ID }}-${{ env.GITHUB_RUN_NUMBER }}
 
       - name: Clean up build output cache
