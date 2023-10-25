@@ -31,35 +31,32 @@ runs:
       id: branch_check
       shell: bash
       run: |
-        echo  "${GITHUB_HEAD_REF}"
-        if [[ "${GITHUB_HEAD_REF}" != "" ]]; then
-          branchName=$(echo ${{ github.ref_name }})
-          isPullRequest=true
-        else
-          branchName=$(echo ${{ github.ref_name }})
-          isPullRequest=false
-        fi
         
         echo "ref= ${{ github.ref }}"
         echo "ref_name= ${{ github.ref_name }}"
-        echo "$branchName"
+
         echo "Check if feature branch"
-        
-        if [[ "$branchName" == feature/*  }} ]]; then
-          echo "$branchName"
+        if [[ ${{ startsWith( github.ref_name, 'feature/' ) }} ]]; then
+          echo "env should be ${{ inputs.feature-branch-env-name }}"
           env_name="${{ inputs.feature-branch-env-name }}"
+          echo "true"
         echo "Check if develop branch"
-        elif [[ "$branchName" == 'develop' ]]; then
-        echo "$branchName"
+        elif [[ ${{ github.ref_name == 'develop' }} ]]; then
+         echo "env should be ${{ inputs.develop-branch-env-name }}"
           env_name="${{ inputs.develop-branch-env-name }}"
+          echo "true"
         echo "Check if master/main branch"  
-        elif [[  "$branchName" == 'master' ||  "$branchName" == 'main' ]]; then
-          echo "$branchName"
+        elif [[ ${{ github.ref_name == 'master' || github.ref_name == 'main' }} ]]; then
+         echo "env should be ${{ inputs.master-branch-env-name }}"
           env_name="${{ inputs.master-branch-env-name }}"
+          echo "true" 
         echo "Check if tag" 
         elif [[ ${{ contains(github.ref, 'refs/tags') }} ]]; then
-          echo "$branchName"
+         echo "env should be ${{ inputs.tag-env-name }}"
           env_name="${{ inputs.tag-env-name }}"
+          echo "true" 
         fi
+          echo "ref_name= ${{ github.ref_name }}"
+          echo "environment=${env_name}"
           echo "env_name=${env_name}" >> $GITHUB_OUTPUT
           echo "environment=${env_name}"
