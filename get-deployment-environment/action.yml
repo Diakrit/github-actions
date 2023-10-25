@@ -33,11 +33,11 @@ runs:
       run: |        
         echo "ref=${{ github.ref }}"
         echo "ref_name=${{ github.ref_name }}"        
-        if [[ ${{ github.ref_name }} = feature/* ]]; then
+        if [[ ${{ github.ref_name }} == feature/* ]]; then
           echo "Check if feature branch"
           echo "env should be ${{ inputs.feature-branch-env-name }}"
           env_name="${{ inputs.feature-branch-env-name }}"      
-        elif [[ ${{ github.ref_name }} = "develop" }} ]]; then
+        elif [[ ${{ github.ref_name }} == "develop" }} ]]; then
           echo "Check if develop branch"
           echo "env should be ${{ inputs.develop-branch-env-name }}"
           env_name="${{ inputs.develop-branch-env-name }}"       
