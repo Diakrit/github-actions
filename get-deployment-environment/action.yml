@@ -22,15 +22,19 @@ inputs:
 outputs:
   env_name:
     description: "Name of environment"
-    value: ${{ steps.get-environment.outputs.env_name }}
+    value: ${{ steps.branch_check.outputs.env_name }}
 
 runs:
   using: "composite"
   steps:
     - name: Set deployment environment
-      id: get-environment
+      id: branch_check
       shell: bash
       run: |
+        echo " ${{ github.ref }}"
+        echo " ${{ github.ref_name }}"
+        echo " ${{ github.head_ref }}"
+        echo " ${{ github.base_ref }}"
         echo "Check if feature branch"
         if [[ ${{ contains(github.ref, 'feature/') }} ]]; then
           env_name="${{ inputs.feature-branch-env-name }}"
