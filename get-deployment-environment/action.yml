@@ -58,7 +58,8 @@ runs:
       shell: bash
       run: |
         echo "Github Ref is: ${{ github.ref }}"
-        echo "branch_name=$(echo ${{ github.ref }} | sed 's|.*\/||')" >> $GITHUB_ENV
+        branch_name="$(echo ${{ github.ref }} | sed 's|.*\/||')"
+        echo "branch_name=${branch_name}"
         if [[ ${{ github.ref }} == *'feature/'* ]]; then
           echo "Check if feature branch"
           echo "env should be ${{ inputs.feature-branch-env-name }}"
