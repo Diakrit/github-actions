@@ -6,23 +6,49 @@ inputs:
     description: 'Name of the deployment environment for feature branches - default is `uat`'
     required: false
     default: 'uat'
+  feature-branch-env-url-prefix:
+    description: 'url to where change is deployed to for feature branches'
+    required: false
+    default: 'uat'
   develop-branch-env-name:
     description: 'Name of the deployment environment for develop branches - default is `qa`'
+    required: false
+    default: 'qa'
+  develop-branch-env-url-prefix:
+    description: 'url to where change is deployed to for develop branch'
     required: false
     default: 'qa'
   master-branch-env-name:
     description: 'Name of the deployment environment for master/main branches - default is `staging`'
     required: false
     default: 'staging'
+  master-branch-env-url-prefix:
+    description: 'url to where change is deployed to for master/main branch'
+    required: false
+    default: 'staging'
   tag-env-name:
     description: 'Name of the deployment environment for tags/releases - default is `production`'
     required: false
     default: 'production'
-
+  tag-env-url-prefix:
+    description: 'url to where change is deployed to for tags'
+    required: false
+    default: 'portal'
+  env-domain-url:
+    description: 'specify main domain like `example.com` - This is used in combination with the `*-url-prefix` value'
+    required: false
+    default: 'diakrit.com'
+  use-feature-name-in-url:
+    description: 'Specify if the feature branch name should be added before the url-prefix. Default is set to `"true"`'
+    required: false
+    default: 'true'
 outputs:
   env_name:
     description: "Name of environment"
     value: ${{ steps.branch_check.outputs.env_name }}
+  env_url:
+    description: "URL to deployed environment"
+    value: ${{ steps.branch_check.outputs.env_url }}
 
 runs:
   using: "composite"
@@ -31,11 +57,16 @@ runs:
       id: branch_check
       shell: bash
       run: |
-        echo "Github Ref is: ${{ github.ref }}" 
+        echo "Github Ref is: ${{ github.ref }}"
+        echo "branch_name=$(echo ${{ github.ref }} | sed 's|.*\/||')" >> $GITHUB_ENV
         if [[ ${{ github.ref }} == *'feature/'* ]]; then
           echo "Check if feature branch"
           echo "env should be ${{ inputs.feature-branch-env-name }}"
+          echo "url-prefix is ${{ inputs.feature-branch-env-url-prefix }}"
+          echo "url should be: https://${branch_name}.${{ inputs.feature-branch-env-url-prefix }}.${{ inputs.env-domain-url }}
           env_name="${{ inputs.feature-branch-env-name }}"
+          env_url="https://${{ branch_name }}.${{ inputs.feature-branch-env-url-prefix }}.${{ inputs.env-domain-url }}"
+        
         elif [[ ${{ github.ref }} == 'refs/heads/develop' ]]; then
           echo "Check if develop branch"
           echo "env should be ${{ inputs.develop-branch-env-name }}"
