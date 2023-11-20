@@ -60,8 +60,8 @@ runs:
         echo "Github Ref is: ${{ github.ref }}"
         if [[ ${{ github.ref }} == *'feature/'* ]]; then
           echo "Check if feature branch"
-          echo "branch_name=$(echo ${{ github.ref }} | sed 's|.*\/||')" >> $GITHUB_ENV
-          echo "branch=${branch_name}"
+          branch_name="$(echo ${{ github.ref }} | sed 's|.*\/||')"
+          echo "branch=${branch_name}" >> $GITHUB_OUTPUT
           echo "env should be ${{ inputs.feature-branch-env-name }}"
           echo "url-prefix is ${{ inputs.feature-branch-env-url-prefix }}"
           echo "url should be: https://${branch_name}.${{ inputs.feature-branch-env-url-prefix }}.${{ inputs.env-domain-url }}
