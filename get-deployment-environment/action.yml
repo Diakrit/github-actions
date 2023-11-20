@@ -37,7 +37,7 @@ inputs:
   env-domain-url:
     description: 'specify main domain like `example.com` - This is used in combination with the `*-url-prefix` value'
     required: false
-    default: ''
+    default: 'diakrit.com'
   use-feature-name-in-url:
     description: 'Specify if the feature branch name should be added before the url-prefix. Default is set to `"true"`'
     required: false
@@ -60,7 +60,7 @@ runs:
         echo "Github Ref is: ${{ github.ref }}" 
         if [[ ${{ github.ref }} == *'feature/'* ]]; then
           echo "Check if feature branch"
-          echo "branch_name=$(echo ${{ github.ref }} | sed 's|.*\/||')"
+          echo "branch_name=$(echo ${{ github.ref }} | sed 's|.*\/||')" >> $GITHUB_OUTPUT
           echo "env should be ${{ inputs.feature-branch-env-name }}"
           echo "url-prefix is ${{ inputs.feature-branch-env-url-prefix }}"
           echo "url should be: https://${{ inputs.feature-branch-env-url-prefix }}.${{ inputs.env-domain-url }}
