@@ -70,6 +70,13 @@ runs:
           echo "url-prefix is ${{ inputs.feature-branch-env-url-prefix }}"
           echo "url should be: https://${{ inputs.feature-branch-env-url-prefix }}.${{ inputs.env-domain-url }}"
           env_name="${{ inputs.feature-branch-env-name }}"
+          if [[ ${{ inputs.use-feature-name-in-url }} == 'true' ]]; then
+          echo "https://${branch_name}.${{ inputs.feature-branch-env-url-prefix }}.${{ inputs.env-domain-url }}"
+          env_url="https://${branch_name}.${{ inputs.feature-branch-env-url-prefix }}.${{ inputs.env-domain-url }}"
+          elif [[ ${{ inputs.use-feature-name-in-url }} == 'false' ]]; then
+          env_url="${{ inputs.feature-branch-env-url-prefix }}.${{ inputs.env-domain-url }}"
+          fi
+          echo "https://${{ inputs.feature-branch-env-url-prefix }}.${{ inputs.env-domain-url }}"
           env_url="https://${{ inputs.feature-branch-env-url-prefix }}.${{ inputs.env-domain-url }}"
         
         elif [[ ${{ github.ref }} == 'refs/heads/develop' ]]; then
