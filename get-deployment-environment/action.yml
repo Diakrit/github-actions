@@ -62,14 +62,21 @@ runs:
         if [[ ${{ github.ref }} == *'feature/'* ]]; then
           echo "Check if feature branch"
           echo "branch_name=$(echo ${{ github.ref }} | sed 's|.*\/||')" 
+          branch_name="$(echo ${{ github.ref }} | sed 's|.*\/||')"
           echo "branch_name=${branch_name}" >> $GITHUB_OUTPUT
+          echo "branch_name=${branch_name}" 
+          echo "${branch_name}"
+          echo "env should be ${{ inputs.feature-branch-env-name }}"
+          echo "url-prefix is ${{ inputs.feature-branch-env-url-prefix }}"
+          echo "url should be: https://${{ inputs.feature-branch-env-url-prefix }}.${{ inputs.env-domain-url }}"
           env_name="${{ inputs.feature-branch-env-name }}"
           if [[ ${{ inputs.use-feature-name-in-url }} == 'true' ]]; then
-            env_url="https://${branch_name}.${{ inputs.feature-branch-env-url-prefix }}.${{ inputs.env-domain-url }}"
+          echo "https://${branch_name}.${{ inputs.feature-branch-env-url-prefix }}.${{ inputs.env-domain-url }}"
+          env_url="https://${branch_name}.${{ inputs.feature-branch-env-url-prefix }}.${{ inputs.env-domain-url }}"
           elif [[ ${{ inputs.use-feature-name-in-url }} == 'false' ]]; then
             env_url="${{ inputs.feature-branch-env-url-prefix }}.${{ inputs.env-domain-url }}"
           fi
-        
+          
         elif [[ ${{ github.ref }} == 'refs/heads/develop' ]]; then
           echo "Check if develop branch"
           echo "env should be ${{ inputs.develop-branch-env-name }}"
