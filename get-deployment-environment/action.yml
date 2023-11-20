@@ -58,10 +58,10 @@ runs:
       shell: bash
       run: |
         echo "Github Ref is: ${{ github.ref }}"
-        branch_name="$(echo ${{ github.ref }} | sed 's|.*\/||')"
-        echo "branch_name=${branch_name}"
         if [[ ${{ github.ref }} == *'feature/'* ]]; then
           echo "Check if feature branch"
+         branch_name="$(echo ${{ github.ref }} | sed 's|.*\/||')"
+          echo "branch_name=${branch_name}"
           echo "env should be ${{ inputs.feature-branch-env-name }}"
           echo "url-prefix is ${{ inputs.feature-branch-env-url-prefix }}"
           echo "url should be: https://${branch_name}.${{ inputs.feature-branch-env-url-prefix }}.${{ inputs.env-domain-url }}
