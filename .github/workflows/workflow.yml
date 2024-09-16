@@ -38,7 +38,7 @@ jobs:
       # Download artifact for Windows - @todo we should probably use cache here as well... instead of artifacts
       - name: Download artifact
         if: contains(runner.os, 'windows')
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: built-artifact
 
@@ -50,14 +50,14 @@ jobs:
       # Download and delete cache for Linux
       - name: Retrieve the build output cache
         if: contains(runner.os, 'linux')
-        uses: actions/cache/restore@v3
+        uses: actions/cache/restore@v4
         with:
           path: ${{ inputs.target_dir }}
           key: workflow-run-build-output-${{ github.run_id }}-${{ github.run_number }}
 
       - name: Clean up build output cache
         if: contains(runner.os, 'linux')
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         with:
           script: |
             await github.rest.actions.deleteActionsCacheByKey({
@@ -78,7 +78,7 @@ jobs:
 
       - name: Remove uploaded artifact
         if: contains(runner.os, 'windows')
-        uses: geekyeggo/delete-artifact@v1
+        uses: geekyeggo/delete-artifact@v5
         with:
           name: built-artifact
           failOnError: false
